@@ -5,5 +5,6 @@
 
 - Import data: R code for importing Data from Google Sheet to R.
 - Descriptive Statistics: R Code for implementing descriptive statistics.
+- Norm test: R code for test normality of variables.
 - ANOVA & Krusal: R Code for implementating ANOVA, Krusal, DunnettT3 test.
 
