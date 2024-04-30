@@ -1,0 +1,375 @@
+---
+title: "vedan_ANOVA_Krusal"
+output: html_document
+date: "2024-04-24"
+---
+
+
+
+```{r}
+library(dplyr)
+library(purrr)
+
+activity.aov.res <- aov(reaction.count ~ activity.type, data = raw.all)
+print(summary(activity.aov.res))
+
+kruskal.test(reaction.count ~ activity.type, data = raw.all)
+
+library(PMCMRplus)
+activity.dunnettT3.res <- dunnettT3Test(activity.aov.res)
+summary(activity.dunnettT3.res)
+summaryGroup(activity.dunnettT3.res)
+```
+
+
+```{r}
+
+library(dplyr)
+library(purrr)
+
+activity.aov.res <- aov(view.count ~ activity.type, data = raw.all)
+print(summary(activity.aov.res))
+
+kruskal.test(view.count ~ activity.type, data = raw.all)
+
+library(PMCMRplus)
+activity.dunnettT3.res <- dunnettT3Test(activity.aov.res)
+summary(activity.dunnettT3.res)
+summaryGroup(activity.dunnettT3.res)
+
+
+
+
+```
+
+
+
+```{r}
+
+library(dplyr)
+library(purrr)
+
+activity.aov.res <- aov(view.count ~ activity.type, data = raw.all[raw.all$content.type=="Video",])
+print(summary(activity.aov.res))
+
+kruskal.test(view.count ~ activity.type, data = raw.all[raw.all$content.type=="Video",])
+
+library(PMCMRplus)
+activity.dunnettT3.res <- dunnettT3Test(activity.aov.res)
+summary(activity.dunnettT3.res)
+summaryGroup(activity.dunnettT3.res)
+
+
+
+
+```
+
+
+```{r}
+library(dplyr)
+library(purrr)
+
+activity.aov.res <- aov(share.count ~ activity.type, data = raw.all)
+print(summary(activity.aov.res))
+
+kruskal.test(share.count ~ activity.type, data = raw.all)
+
+library(PMCMRplus)
+activity.dunnettT3.res <- dunnettT3Test(activity.aov.res)
+summary(activity.dunnettT3.res)
+summaryGroup(activity.dunnettT3.res)
+
+```
+
+```{r}
+View(raw.all)
+
+```
+
+
+
+
+```{r}
+library(dplyr)
+library(purrr)
+
+activity.aov.res <- aov(comment.count ~ activity.type, data = raw.all)
+print(summary(activity.aov.res))
+
+kruskal.test(comment.count ~ activity.type, data = raw.all)
+
+library(PMCMRplus)
+activity.dunnettT3.res <- dunnettT3Test(activity.aov.res)
+summary(activity.dunnettT3.res)
+summaryGroup(activity.dunnettT3.res)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=========================================================
+=========================================================
+
+```{r}
+
+library(dplyr)
+library(purrr)
+
+
+#omit.raw.all <- na.omit(raw.all)
+
+strategy.aov.res <- aov(reaction.count ~ strategy.type, data = raw.all)
+
+print(summary(strategy.aov.res))
+
+
+kruskal.test(reaction.count ~ strategy.type, data = raw.all)
+
+
+library(PMCMRplus)
+strategy.dunnettT3.res <- dunnettT3Test(strategy.aov.res)
+summary(strategy.dunnettT3.res)
+summaryGroup(strategy.dunnettT3.res)
+
+
+
+
+
+
+```
+
+
+
+```{r}
+
+library(dplyr)
+library(purrr)
+
+
+#omit.raw.all <- na.omit(raw.all)
+
+strategy.aov.res <- aov(view.count ~ strategy.type, data = raw.all)
+
+print(summary(strategy.aov.res))
+
+
+kruskal.test(view.count ~ strategy.type, data = raw.all)
+
+
+library(PMCMRplus)
+strategy.dunnettT3.res <- dunnettT3Test(strategy.aov.res)
+summary(strategy.dunnettT3.res)
+summaryGroup(strategy.dunnettT3.res)
+
+
+
+
+
+
+```
+
+
+```{r}
+
+library(dplyr)
+library(purrr)
+
+
+#omit.raw.all <- na.omit(raw.all)
+
+strategy.aov.res <- aov(view.count ~ strategy.type, data = raw.all[raw.all$content.type=="Video",])
+
+print(summary(strategy.aov.res))
+
+
+kruskal.test(view.count ~ strategy.type, data = raw.all[raw.all$content.type=="Video",])
+
+
+library(PMCMRplus)
+strategy.dunnettT3.res <- dunnettT3Test(strategy.aov.res)
+summary(strategy.dunnettT3.res)
+summaryGroup(strategy.dunnettT3.res)
+
+
+
+
+
+
+```
+
+
+```{r}
+
+library(dplyr)
+library(purrr)
+
+
+#omit.raw.all <- na.omit(raw.all)
+
+strategy.aov.res <- aov(share.count ~ strategy.type, data = raw.all)
+
+print(summary(strategy.aov.res))
+
+
+kruskal.test(share.count ~ strategy.type, data = raw.all)
+
+
+library(PMCMRplus)
+strategy.dunnettT3.res <- dunnettT3Test(strategy.aov.res)
+summary(strategy.dunnettT3.res)
+summaryGroup(strategy.dunnettT3.res)
+
+
+
+
+
+
+```
+
+```{r}
+
+library(dplyr)
+library(purrr)
+
+
+#omit.raw.all <- na.omit(raw.all)
+
+strategy.aov.res <- aov(comment.count ~ strategy.type, data = raw.all)
+
+print(summary(strategy.aov.res))
+
+
+kruskal.test(comment.count ~ strategy.type, data = raw.all)
+
+
+library(PMCMRplus)
+strategy.dunnettT3.res <- dunnettT3Test(strategy.aov.res)
+summary(strategy.dunnettT3.res)
+summaryGroup(strategy.dunnettT3.res)
+
+
+
+
+
+
+```
+```{r}
+library(gt)
+
+gt_strategy.tbl <- strategy.aov.res |> as.data.frame() |> gt()
+
+gt_strategy.tbl
+
+```
+
+
+```{r}
+
+aov2.res <- aov(reaction.count ~ activity.type + strategy.type + activity.type:strategy.type, data = raw.all)
+
+print(summary(aov2.res))
+
+
+
+#table(raw.all$strategy.type)
+
+
+```
+
+
+
+===================================================
+Phan tich MCA
+
+```{r}
+mca.data <- raw.all[, c("channel","content.type", "activity.type", "strategy.type")]
+
+library(Factoshiny)
+
+Factoshiny(mca.data)
+
+
+```
+
+```{r}
+
+library(Factoshiny)
+
+Factoshiny(raw.all)
+
+```
+
+
+```{r}
+library(Factoshiny)
+
+Factoshiny(raw.all[,c("channel","content.type", "activity.type", "strategy.type", "view.count", "comment.count", "reaction.count", "share.count")])
+
+```
+
+```{r}
+library(FactoMineR) 
+
+res.pca <- PCA(raw.all[,c("channel", "view.count", "comment.count", "reaction.count", "share.count"),], quali.sup = "channel")
+```
+
+
+
+
+Kiểm định thay thế
+
+```{r}
+
+t.test(reaction.count ~ activity.type, data = raw.all)
+
+```
+
+
+
+
+```{r}
+
+# Function to create an ANOVA table dataframe
+create_anova_table <- function(anova.res) {
+  # Extract relevant components
+  F_statistic <- summary(anova.res)[[1]]$F[1]
+  p_value <- summary(anova.res)[[1]]$Pr[1]
+  degrees_of_freedom <- summary(anova.res)[[1]]$Df[1]
+
+  # Create a dataframe
+  anova_results <- data.frame(
+    Factor = c("Factor1", "Factor2", "Error"),
+    F_Statistic = c(F_statistic, NA, NA),
+    P_Value = c(p_value, NA, NA),
+    Degrees_of_Freedom = c(degrees_of_freedom, NA, NA)
+  )
+
+  return(anova_results)
+}
+
+# Example usage:
+# Replace `your_anova_result` with your actual ANOVA result
+
+result_df <- create_anova_table(strategy.aov.res)
+
+# Print the resulting dataframe
+print(result_df)
+
+
+```
+
+
+
+

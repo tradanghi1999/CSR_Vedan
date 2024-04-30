@@ -1,0 +1,111 @@
+---
+title: "Vedan_Kiem Tra Phan Phoi Chuan"
+output: html_notebook
+---
+
+
+
+# Kiem dinh gia dinh cua ANOVA
+
+## Kiem tra gia dinh cua Activity
+
+```{r}
+raw.all.consumers <- raw.all[raw.all$activity.type=="Consumers",]
+shapiro.test(raw.all.consumers$reaction.count)
+shapiro.test(raw.all.consumers$comment.count)
+shapiro.test(raw.all.consumers$share.count)
+
+shapiro.test(raw.all.consumers$view.count)
+shapiro.test((raw.all.consumers[raw.all.consumers$content.type=="Video",])$view.count)
+
+
+```
+
+```{r}
+raw.all.local <- raw.all[raw.all$activity.type=="Local community and society",]
+shapiro.test(raw.all.local$reaction.count)
+shapiro.test(raw.all.local$comment.count)
+shapiro.test(raw.all.local$share.count)
+
+shapiro.test(raw.all.local$view.count)
+shapiro.test((raw.all.local[raw.all.local$content.type=="Video",])$view.count)
+```
+
+
+```{r}
+raw.all.employee <- raw.all[raw.all$activity.type=="Employees",]
+shapiro.test(raw.all.employee$reaction.count)
+
+count(raw.all.employee)
+
+shapiro.test(raw.all.employee$view.count)
+shapiro.test((raw.all.employee[raw.all.employee$content.type=="Video",])$view.count)
+
+shapiro.test(raw.all.employee$comment.count)
+shapiro.test(raw.all.employee$share.count)
+
+
+```
+
+```{r}
+raw.all.environment <- raw.all[raw.all$activity.type=="Environment",]
+
+count(raw.all.environment)
+
+shapiro.test(raw.all.environment$reaction.count)
+
+shapiro.test(raw.all.environment$share.count)
+shapiro.test(raw.all.environment$comment.count)
+
+
+shapiro.test(raw.all.environment$view.count)
+shapiro.test((raw.all.environment[raw.all.environment$content.type=="Video",])$view.count)
+
+
+
+
+```
+
+
+
+
+
+
+
+## Kiem tra gia dinh cua Strategy
+
+```{r}
+raw.all.broadcasting <- raw.all[raw.all$strategy.type=="Broadcasting",]
+shapiro.test(raw.all.broadcasting$reaction.count)
+shapiro.test(raw.all.broadcasting$comment.count)
+shapiro.test(raw.all.broadcasting$share.count)
+
+shapiro.test(raw.all.broadcasting$view.count)
+
+
+
+```
+
+```{r}
+raw.all.reactive <- raw.all[raw.all$strategy.type=="Reactive",]
+shapiro.test(raw.all.reactive$reaction.count)
+shapiro.test(raw.all.reactive$comment.count)
+shapiro.test(raw.all.reactive$share.count)
+
+shapiro.test(raw.all.reactive$view.count)
+
+
+```
+
+
+```{r}
+raw.all.engagement <- raw.all[raw.all$strategy.type=="Engagement",]
+shapiro.test(raw.all.engagement$reaction.count)
+shapiro.test(raw.all.engagement$comment.count)
+shapiro.test(raw.all.engagement$share.count)
+
+shapiro.test(raw.all.engagement$view.count)
+
+
+```
+

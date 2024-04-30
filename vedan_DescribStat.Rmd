@@ -1,0 +1,224 @@
+---
+title: "Vedan_DescribStat"
+output: html_document
+date: "2024-04-28"
+---
+
+
+```{r}
+names(raw.all)
+
+
+```
+
+
+
+
+```{r}
+library(gt)
+
+
+stats <- raw.all[, c("postId","channel", "content.type", "activity.type", "strategy.type", "view.count", "comment.count", "share.count", "reaction.count")]
+
+#row_names.stat <- stats$postId
+
+
+
+#rownames(stats) <- row_names.stat
+
+#stats <- stats[, -1]
+
+summary(stats[,-1])
+
+
+```
+
+```{r}
+consumer.stat <- (stats[stats$activity.type =="Consumers",])[,-1]
+
+summary(consumer.stat)
+
+
+```
+
+```{r}
+local.stat <- (stats[stats$activity.type =="Local community and society",])[,-1]
+
+summary(local.stat)
+
+
+```
+
+
+
+```{r}
+employee.stat <- (stats[stats$activity.type =="Employees",])[,-1]
+
+summary(employee.stat)
+
+
+```
+```{r}
+environment.stat <- (stats[stats$activity.type =="Environment",])[,-1]
+
+summary(environment.stat)
+
+
+```
+
+
+
+```{r}
+
+stats[stats$channel=="Youtube" & is.na(stats$share.count),]
+
+```
+
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+library(ggthemes)
+
+
+ggplot(data= stats, aes(x = reaction.count)) + geom_histogram(fill="blue", col="white") + labs(x="Số lượt reaction", y="Xác xuất", title="Phân bố của số lượt Reaction")
+
+
+ggplot(data= stats, aes(x = reaction.count)) + geom_histogram(aes(y=..density..),fill="blue", col="white") + geom_density(col="red") + labs(x="Số lượt reaction", y="Xác xuất", title="Phân bố của số lượt Reaction")
+
+
+ggplot(data= stats, aes(x = reaction.count, fill=activity.type, col=activity.type)) + geom_density(alpha = 0.1)+ labs(x="Số lượt reaction", y="Xác xuất", title="Phân bố của số lượt Reaction theo Activity.Type") 
+
+
+
+
+```
+
+
+```{r}
+
+ggplot(data= stats, aes(x = comment.count, fill=activity.type, col=activity.type)) + geom_density(alpha = 0.1)+ labs(x="Số lượt reaction", y="Xác xuất", title="Phân bố của số lượt Comment theo Activity.Type") 
+
+
+```
+
+
+```{r}
+ggplot(data= stats, aes(x = share.count, fill=activity.type, col=activity.type)) + geom_density(alpha = 0.1)+ labs(x="Số lượt reaction", y="Xác xuất", title="Phân bố của số lượt Share theo Activity.Type")  
+
+
+```
+```{r}
+ggplot(data= stats, aes(x = view.count, fill=activity.type, col=activity.type)) + geom_density(alpha = 0.1)+ labs(x="Số lượt reaction", y="Xác xuất", title="Phân bố của số lượt View theo Activity.Type")  
+
+
+```
+
+
+```{r}
+activity.n <- raw.all |> count(activity.type)
+
+activity.reaction <- raw.all |> group_by(activity.type) |> summarise(mean = mean(reaction.count), median=median(reaction.count), sd = sd(reaction.count))
+print(activity.reaction)
+
+
+activity.comment <- raw.all |> group_by(activity.type) |> summarise(mean = mean(comment.count), median=median(comment.count), sd = sd(comment.count))
+print(activity.comment)
+
+
+activity.share <- raw.all |> group_by(activity.type) |> summarise(mean = mean(share.count, na.rm = TRUE), median=median(share.count, na.rm = TRUE), sd = sd(share.count,na.rm = TRUE))
+print(activity.share)
+
+activity.view <- raw.all |> group_by(activity.type) |> summarise(mean = mean(view.count, na.rm = TRUE), median=median(view.count, na.rm = TRUE), sd = sd(view.count,na.rm = TRUE))
+print(activity.view)
+  
+  
+  #group_by(activity.type) |> summarise(n = )
+
+#print(activity.reaction)
+
+```
+
+
+```{r}
+
+table(stats$reaction.count)
+
+
+```
+
+
+
+
+```{r}
+strategy.n <- raw.all |> count(strategy.type)
+print(strategy.n)
+
+```
+
+
+```{r}
+broadcasting.stat <- (stats[stats$strategy.type =="Broadcasting",])[,-1]
+
+summary(broadcasting.stat)
+
+
+```
+```{r}
+reactive.stat <- (stats[stats$strategy.type =="Reactive",])[,-1]
+
+summary(reactive.stat)
+
+
+```
+```{r}
+engagement.stat <- (stats[stats$strategy.type =="Engagement",])[,-1]
+
+summary(engagement.stat)
+
+
+```
+
+
+
+
+
+```{r}
+
+strategy.reaction <- raw.all |> group_by(strategy.type) |> summarise(mean = mean(reaction.count), median=median(reaction.count), sd = sd(reaction.count))
+print(strategy.reaction)
+
+
+strategy.comment <- raw.all |> group_by(strategy.type) |> summarise(mean = mean(comment.count), median=median(comment.count), sd = sd(comment.count))
+print(strategy.comment)
+
+
+strategy.share <- raw.all |> group_by(strategy.type) |> summarise(mean = mean(share.count, na.rm = TRUE), median=median(share.count, na.rm = TRUE), sd = sd(share.count,na.rm = TRUE))
+print(strategy.share)
+
+strategy.view <- raw.all |> group_by(strategy.type) |> summarise(mean = mean(view.count, na.rm = TRUE), median=median(view.count, na.rm = TRUE), sd = sd(view.count,na.rm = TRUE))
+print(strategy.view)
+
+
+```
+
+
+
+
+```{r}
+ggplot(data= stats, aes(x = reaction.count, fill=strategy.type, col=strategy.type)) + geom_density(alpha = 0.1)+ labs(x="Số lượt reaction", y="Xác xuất", title="Phân bố của số lượt Reaction theo strategy.Type") 
+```
+
+
+```{r}
+ggplot(data= stats, aes(x = comment.count, fill=strategy.type, col=strategy.type)) + geom_density(alpha = 0.1)+ labs(x="Số lượt reaction", y="Xác xuất", title="Phân bố của số lượt Comment theo strategy.Type") 
+```
+
+
+```{r}
+ggplot(data= stats, aes(x = share.count, fill=strategy.type, col=strategy.type)) + geom_density(alpha = 0.1)+ labs(x="Số lượt reaction", y="Xác xuất", title="Phân bố của số lượt Share theo strategy.Type")  
+```
+
+```{r}
+ggplot(data= stats, aes(x = view.count, fill=strategy.type, col=strategy.type)) + geom_density(alpha = 0.1)+ labs(x="Số lượt reaction", y="Xác xuất", title="Phân bố của số lượt View theo strategy.Type")  
+```

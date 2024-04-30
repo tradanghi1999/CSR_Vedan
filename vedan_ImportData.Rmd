@@ -1,0 +1,386 @@
+---
+title: "Vedan_ImportData"
+output: html_document
+date: "2024-04-27"
+---
+
+
+
+
+
+# Import Data From Google Sheet
+## Import facebook sheet
+
+```{r, echo=TRUE}
+library(googlesheets4)
+#=======================================================================================
+# import sheet facebook
+raw.facebook <- read_sheet("https://docs.google.com/spreadsheets/d/1gTd6eU6hLX0aWjnJ3PQAwb7RIaLisA6TUMqN8GYI43k/edit?usp=drive_link", sheet="4.1. facebook")
+
+# Assuming your dataframe is named 'df'
+# Get column names from the second row
+col_names <- as.character(raw.facebook[2,])
+
+# Assign column names to the dataframe
+colnames(raw.facebook) <- col_names
+
+# Remove the second row since it is now used as column names
+raw.facebook <- raw.facebook[-2,]
+raw.facebook <- raw.facebook[-1,]
+raw.facebook <- raw.facebook[,-1]
+raw.facebook<- raw.facebook[,c(1,2,3,4,5,6,9,10,11,12,13, 14, 15, 18,19, 32)] # chỉ lấy các cột liên quan từ bảng dữ liẹu raw
+
+fb.col_names <- c("postId", "dateGet", "datePost", "channel", "link", "post.content", "content.type", "activity.type", "activity.explain", "strategy.type", "strategy.explain", "view.count", "comment.count", "share.count", "reaction.count", "hashtag") #đặt lại tên các cột để dễ truy cập
+
+colnames(raw.facebook) <- fb.col_names
+
+raw.facebook$channel <- "Facebook"
+
+```
+
+
+## Import Instagram sheet
+```{r, echo=FALSE}
+#=======================================================================================
+
+
+# import sheet Instagram
+raw.instagram <- read_sheet("https://docs.google.com/spreadsheets/d/1gTd6eU6hLX0aWjnJ3PQAwb7RIaLisA6TUMqN8GYI43k/edit?usp=drive_link", sheet="4.2. Instagram")
+
+# Assuming your dataframe is named 'df'
+# Get column names from the second row
+col_names <- as.character(raw.instagram[2,])
+
+# Assign column names to the dataframe
+colnames(raw.instagram) <- col_names
+
+# Remove the second row since it is now used as column names
+raw.instagram <- raw.instagram[-2,]
+raw.instagram <- raw.instagram[-1,]
+raw.instagram <- raw.instagram[,-1]
+raw.instagram<- raw.instagram[,c(1,2,3,4,5,6,9,10,11,12,13,14,15,18,19,31)] # chỉ lấy các cột liên quan từ bảng dữ liẹu raw
+
+insta.col_names <- c("postId", "dateGet", "datePost", "channel", "link", "post.content", "content.type", "activity.type", "activity.explain", "strategy.type", "strategy.explain", "view.count_na", "comment.count", "share.count", "reaction.count", "hashtag") #đặt lại tên các cột để dễ truy cập
+
+colnames(raw.instagram) <- insta.col_names
+
+raw.instagram$channel <- "Instagram"
+
+raw.instagram.add <- read_sheet("https://docs.google.com/spreadsheets/d/1gTd6eU6hLX0aWjnJ3PQAwb7RIaLisA6TUMqN8GYI43k/edit?usp=drive_link", sheet="4.6 Du Lieu Bo Sung Instagram")
+
+#merged_data
+library(dplyr)
+raw.instagram <- inner_join(raw.instagram, raw.instagram.add, by = "postId")
+
+raw.instagram <- raw.instagram[, c("postId", "dateGet", "datePost", "channel", "link", "post.content", "content.type", "activity.type", "activity.explain", "strategy.type", "strategy.explain", "view.count", "comment.count", "share.count", "reaction.count", "hashtag")]
+
+
+
+
+```
+
+## Import Tiktok sheet
+```{r, echo=FALSE}
+
+#============================================================================================
+
+# import sheet Tiktok
+raw.tiktok <- read_sheet("https://docs.google.com/spreadsheets/d/1gTd6eU6hLX0aWjnJ3PQAwb7RIaLisA6TUMqN8GYI43k/edit?usp=drive_link", sheet="4.3 TikTok")
+
+# Assuming your dataframe is named 'df'
+# Get column names from the second row
+col_names <- as.character(raw.tiktok[2,])
+
+# Assign column names to the dataframe
+colnames(raw.tiktok) <- col_names
+
+# Remove the second row since it is now used as column names
+raw.tiktok <- raw.tiktok[-2,]
+raw.tiktok <- raw.tiktok[-1,]
+raw.tiktok <- raw.tiktok[,-1]
+raw.tiktok<- raw.tiktok[,c(1,2,3,4,5,6,9,10,11,12,13, 14, 15, 18,19, 31)] # chỉ lấy các cột liên quan từ bảng dữ liẹu raw
+
+tiktok.col_names <- c("postId", "dateGet", "datePost", "channel", "link", "post.content", "content.type", "activity.type", "activity.explain", "strategy.type", "strategy.explain", "view.count", "comment.count", "share.count", "reaction.count", "hashtag") #đặt lại tên các cột để dễ truy cập
+
+colnames(raw.tiktok) <- tiktok.col_names
+
+raw.tiktok$channel <- "Tiktok"
+
+```
+
+
+## Import sheet Youtube
+```{r, echo=FALSE}
+#=========================================================================================
+
+# import sheet youtube
+raw.youtube <- read_sheet("https://docs.google.com/spreadsheets/d/1gTd6eU6hLX0aWjnJ3PQAwb7RIaLisA6TUMqN8GYI43k/edit?usp=drive_link", sheet="4.4. Youtube")
+
+raw.youtube<- raw.youtube[,c(2,25,4,3,2,6,13,15,16,17,18, 9, 10, 19, 25)]
+
+youtube.col_names <- c("postId", "dateGet", "datePost", "channel", "link", "post.content", "content.type", "activity.type", "activity.explain", "strategy.type", "strategy.explain", "view.count", "comment.count", "reaction.count", "hashtag") #đặt lại tên các cột để dễ truy 
+
+colnames(raw.youtube) <- youtube.col_names
+
+raw.youtube$share.count <- NA
+
+raw.youtube$link <- paste0("https://www.youtube.com/watch?v=", raw.youtube$link)
+
+raw.youtube$channel <- "Youtube"
+
+raw.youtube$content.type <- "Video"
+
+raw.youtube$dateGet <- as.Date("2024-04-20")
+
+#==========================================================================================
+
+```
+
+## Import sheet Facebook Internal
+```{r, echo=FALSE}
+
+
+raw.facebook.internal <- read_sheet("https://docs.google.com/spreadsheets/d/1gTd6eU6hLX0aWjnJ3PQAwb7RIaLisA6TUMqN8GYI43k/edit?usp=drive_link", sheet="4.5 Facebook nội bộ")
+
+# Assuming your dataframe is named 'df'
+# Get column names from the second row
+col_names <- as.character(raw.facebook.internal[1,])
+
+# Assign column names to the dataframe
+colnames(raw.facebook.internal) <- col_names
+
+# Remove the second row since it is now used as column names
+#raw.facebook.internal <- raw.facebook.internal[-2,]
+raw.facebook.internal <- raw.facebook.internal[-1,]
+raw.facebook.internal <- raw.facebook.internal[,-1]
+raw.facebook.internal<- raw.facebook.internal[,c(1,2,3,4,5,6,9,10,11,12,13, 14, 15, 18,19, 31)] # chỉ lấy các cột liên quan từ bảng dữ liẹu raw
+
+fb.col_names <- c("postId", "dateGet", "datePost", "channel", "link", "post.content", "content.type", "activity.type", "activity.explain", "strategy.type", "strategy.explain", "view.count", "comment.count", "share.count", "reaction.count", "hashtag") #đặt lại tên các cột để dễ truy cập
+
+colnames(raw.facebook.internal) <- fb.col_names
+
+raw.facebook.internal$channel <- "Facebook"
+
+
+
+
+```
+
+
+```{r, echo=FALSE}
+
+
+#===========================================================================================
+
+#chuyen cac cot bi R hieu nham thanh chu (character) sang so (numeric)
+#"view.count", "comment.count", "share.count", "reaction.count"
+raw.facebook$view.count <- sapply(raw.facebook$view.count, function(x) if(is.null(x)) NA else x)
+raw.facebook$share.count <- as.numeric(raw.facebook$share.count)
+
+raw.facebook$comment.count <- sapply(raw.facebook$comment.count, function(x) if(is.null(x)) NA else x)
+
+raw.facebook$comment.count <- sapply(raw.facebook$comment.count, function(x) if(is.na(x)) 0 else x)
+
+
+raw.facebook$comment.count <- as.numeric(raw.facebook$comment.count)
+
+#raw.facebook$share.count <- sapply(raw.facebook$share.count, function(x) if(is.null(x)) NA else x)
+
+
+raw.facebook$share.count <- sapply(raw.facebook$share.count, function(x) if(is.na(x)) 0 else x)
+
+raw.facebook$share.count <- as.numeric(raw.facebook$share.count)
+
+raw.facebook$reaction.count <- sapply(raw.facebook$reaction.count, function(x) if(is.null(x)) NA else x)
+
+
+raw.facebook$reaction.count <- as.numeric(raw.facebook$reaction.count)
+
+#clean cac cot nhan (label)
+raw.facebook$content.type <- as.factor(raw.facebook$content.type)
+
+raw.facebook$activity.type <- gsub("Consumers", "A", raw.facebook$activity.type, fixed = TRUE)
+raw.facebook$activity.type <- gsub("Consumer", "Consumers", raw.facebook$activity.type, fixed = TRUE)
+raw.facebook$activity.type <- gsub("A", "Consumers", raw.facebook$activity.type, fixed = TRUE)
+raw.facebook$activity.type <- as.factor(raw.facebook$activity.type)
+
+raw.facebook$strategy.type <- as.factor(raw.facebook$strategy.type)
+
+#chuyen cac cot date thanh date cua R
+
+raw.facebook$dateGet <- sapply(raw.facebook$dateGet, function(x) if(is.null(x)) NA else x[[1]])
+raw.facebook$dateGet <- as.POSIXct(raw.facebook$dateGet, origin = "1970-01-01")
+
+raw.facebook$datePost <- sapply(raw.facebook$datePost, function(x) if(is.null(x)) NA else x[[1]])
+raw.facebook$datePost <- as.POSIXct(raw.facebook$datePost, origin = "1970-01-01")
+
+
+
+#================================================================================
+#=======================================================================================
+raw.instagram$view.count <- sapply(raw.instagram$view.count, function(x) if(is.null(x)) NA else x)
+raw.instagram$share.count <- as.numeric(raw.instagram$share.count)
+
+raw.instagram$comment.count <- sapply(raw.instagram$comment.count, function(x) if(is.null(x)) NA else x)
+raw.instagram$comment.count <- as.numeric(raw.instagram$comment.count)
+
+raw.instagram$share.count <- sapply(raw.instagram$share.count, function(x) if(is.null(x)) NA else x)
+raw.instagram$share.count <- as.numeric(raw.instagram$share.count)
+
+raw.instagram$reaction.count <- sapply(raw.instagram$reaction.count, function(x) if(is.null(x)) NA else x)
+raw.instagram$reaction.count <- as.numeric(raw.instagram$reaction.count)
+
+#clean cac cot nhan (label)
+raw.instagram$content.type <- gsub("Video ngắn", "Video", raw.instagram$content.type, fixed = TRUE)
+raw.instagram$content.type <- gsub("Post", "Photo", raw.instagram$content.type, fixed = TRUE)
+raw.instagram$content.type <- as.factor(raw.instagram$content.type)
+
+
+
+raw.instagram$activity.type <- gsub("Consumers", "A", raw.instagram$activity.type, fixed = TRUE)
+raw.instagram$activity.type <- gsub("Consumer", "Consumers", raw.instagram$activity.type, fixed = TRUE)
+raw.instagram$activity.type <- gsub("A", "Consumers", raw.instagram$activity.type, fixed = TRUE)
+raw.instagram$activity.type <- as.factor(raw.instagram$activity.type)
+
+raw.instagram$strategy.type <- as.factor(raw.instagram$strategy.type)
+
+#chuyen date
+
+raw.instagram$dateGet <- sapply(raw.instagram$dateGet, function(x) if(is.null(x)) NA else x[[1]])
+raw.instagram$dateGet <- as.POSIXct(raw.instagram$dateGet, origin = "1970-01-01")
+
+raw.instagram$datePost <- sapply(raw.instagram$datePost, function(x) if(is.null(x)) NA else x[[1]])
+raw.instagram$datePost <- as.POSIXct(raw.instagram$datePost, origin = "1970-01-01")
+
+
+#=================================================================================
+
+raw.tiktok$view.count <- sapply(raw.tiktok$view.count, function(x) if(is.null(x)) NA else x)
+raw.tiktok$share.count <- as.numeric(raw.tiktok$share.count)
+
+raw.tiktok$comment.count <- sapply(raw.tiktok$comment.count, function(x) if(is.null(x)) NA else x)
+raw.tiktok$comment.count <- as.numeric(raw.tiktok$comment.count)
+
+raw.tiktok$share.count <- sapply(raw.tiktok$share.count, function(x) if(is.null(x)) NA else x)
+raw.tiktok$share.count <- as.numeric(raw.tiktok$share.count)
+
+raw.tiktok$reaction.count <- sapply(raw.tiktok$reaction.count, function(x) if(is.null(x)) NA else x)
+raw.tiktok$reaction.count <- as.numeric(raw.tiktok$reaction.count)
+
+#clean cac cot nhan (label)
+raw.tiktok$content.type <- gsub("Video ngắn", "Video", raw.tiktok$content.type, fixed = TRUE)
+raw.tiktok$content.type <- as.factor(raw.tiktok$content.type)
+
+
+raw.tiktok$activity.type <- gsub("Society", "Local community and society", raw.tiktok$activity.type, fixed = TRUE)
+raw.tiktok$activity.type <- as.factor(raw.tiktok$activity.type)
+
+raw.tiktok$strategy.type <- as.factor(raw.tiktok$strategy.type)
+
+
+#
+
+raw.tiktok$dateGet <- as.POSIXct(raw.tiktok$dateGet, format="%m/%d/%Y %H:%M")
+
+raw.tiktok$datePost <- sapply(raw.tiktok$datePost, function(x) if(is.null(x)) NA else x[[1]])
+raw.tiktok$datePost <- as.POSIXct(raw.tiktok$datePost, origin = "1970-01-01")
+
+
+#=======================================================================================
+raw.youtube$view.count <- sapply(raw.youtube$view.count, function(x) if(is.null(x)) NA else x)
+raw.youtube$share.count <- as.numeric(raw.youtube$share.count)
+
+raw.youtube$comment.count <- sapply(raw.youtube$comment.count, function(x) if(is.null(x)) NA else x)
+raw.youtube$comment.count <- as.numeric(raw.youtube$comment.count)
+
+raw.youtube$share.count <- sapply(raw.youtube$share.count, function(x) if(is.null(x)) NA else x)
+raw.youtube$share.count <- as.numeric(raw.youtube$share.count)
+
+raw.youtube$reaction.count <- sapply(raw.youtube$reaction.count, function(x) if(is.null(x)) NA else x)
+raw.youtube$reaction.count <- as.numeric(raw.youtube$reaction.count)
+
+#
+raw.youtube$content.type <- as.factor(raw.youtube$content.type)
+
+raw.youtube$activity.type <- as.factor(raw.youtube$activity.type)
+
+raw.youtube$strategy.type <- as.factor(raw.youtube$strategy.type)
+
+#date
+raw.youtube$datePost <- as.POSIXct(raw.youtube$datePost)
+
+
+#==============================================================================
+
+raw.facebook.internal$view.count <- sapply(raw.facebook.internal$view.count, function(x) if(is.null(x)) NA else x)
+raw.facebook.internal$share.count <- as.numeric(raw.facebook.internal$share.count)
+
+raw.facebook.internal$comment.count <- sapply(raw.facebook.internal$comment.count, function(x) if(is.null(x)) NA else x)
+
+raw.facebook.internal$comment.count <- sapply(raw.facebook.internal$comment.count, function(x) if(is.na(x)) 0 else x)
+
+raw.facebook.internal$comment.count <- as.numeric(raw.facebook.internal$comment.count)
+
+raw.facebook.internal$share.count <- sapply(raw.facebook.internal$share.count, function(x) if(is.null(x)) NA else x)
+raw.facebook.internal$share.count <- as.numeric(raw.facebook.internal$share.count)
+
+raw.facebook.internal$reaction.count <- sapply(raw.facebook.internal$reaction.count, function(x) if(is.null(x)) NA else x)
+raw.facebook.internal$reaction.count <- as.numeric(raw.facebook.internal$reaction.count)
+
+#clean cac cot nhan (label)
+raw.facebook.internal$content.type <- as.factor(raw.facebook.internal$content.type)
+
+
+raw.facebook.internal$activity.type <- as.factor(raw.facebook.internal$activity.type)
+
+raw.facebook.internal$strategy.type <- as.factor(raw.facebook.internal$strategy.type)
+
+#chuyen cac cot date thanh date cua R
+
+raw.facebook.internal$dateGet <- sapply(raw.facebook.internal$dateGet, function(x) if(is.null(x)) NA else x[[1]])
+raw.facebook.internal$dateGet <- as.POSIXct(raw.facebook.internal$dateGet, origin = "1970-01-01")
+
+raw.facebook.internal$datePost <- sapply(raw.facebook.internal$datePost, function(x) if(is.null(x)) NA else x[[1]])
+raw.facebook.internal$datePost <- as.POSIXct(raw.facebook.internal$datePost, origin = "1970-01-01")
+
+
+
+
+#==============================================================================
+#======Lay trong nam 2023 va 2024=============
+raw.all <- rbind(raw.facebook, raw.instagram, raw.tiktok, raw.youtube, raw.facebook.internal)
+
+library(dplyr)
+library(lubridate)
+
+raw.all <- raw.all %>%
+  filter(year(datePost) %in% c(2023, 2024))
+
+raw.all$channel <- as.factor(raw.all$channel)
+
+raw.all$postId < as.character(raw.all$postId)
+
+```
+
+
+```{r}
+
+raw.tiktok %>%
+  filter(year(datePost) %in% c(2024)) %>% count() %>% print()
+
+```
+
+
+```{r}
+
+raw.all$postId <- as.character(raw.all$postId)
+library("writexl")
+
+write_xlsx(raw.all, "C:/Users/trada/Downloads/data_csr.xlsx")
+
+```
+
+
+
+
+
